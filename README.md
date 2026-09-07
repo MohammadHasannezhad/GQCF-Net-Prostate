@@ -28,6 +28,13 @@ Evaluated under identical **Stratified 5-Fold Cross-Validation** settings with Z
 | KNN ($k=5$) | 0.9333 | 0.9333 | 0.8800 | 1.0000 |
 | Random Forest | 0.9111 | 0.9076 | 0.8556 | 1.0000 |
 
+### 📈 Visualizations & Performance Plots
+
+<p align="center">
+  <img src="GQCF_Prostate_ROC_Curve.png" width="48%" alt="ROC Curve" />
+  <img src="GQCF_Prostate_Confusion_Matrix.png" width="45%" alt="Confusion Matrix" />
+</p>
+
 ### 💡 Key Insights & Analysis
 - **New State-of-the-Art (97.78% Accuracy & 0.9600 MCC):** GQCF-Net achieves the top performance across all metrics, outperforming the best classical baselines (95.56%) by **+2.22% in Accuracy** and boosting **MCC to 0.9600** (+0.0335 over Naive Bayes).
 - **Outperforming Classic Deep Learning (+4.45% over MLP):** Compared to standard Multi-Layer Perceptrons (MLP), quantum state embeddings effectively regularize feature representations, preventing high-dimensional overfitting.
