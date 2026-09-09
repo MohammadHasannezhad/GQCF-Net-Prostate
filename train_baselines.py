@@ -10,7 +10,6 @@ from sklearn.metrics import (
     roc_auc_score, matthews_corrcoef
 )
 
-# الگوریتم‌های کلاسیک پایه
 from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
@@ -18,8 +17,6 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.neural_network import MLPClassifier
 
-# ---------------------------------------------------------
-# ۱. دریافت و پیش‌پردازش داده‌ها
 # ---------------------------------------------------------
 def load_prostate_data():
     print("در حال دریافت دیتاست Prostate...")
@@ -42,8 +39,6 @@ def load_prostate_data():
     return X_df_encoded.to_numpy(dtype=np.float32), y
 
 # ---------------------------------------------------------
-# ۲. تعریف مدل‌های کلاسیک (منطبق با مقاله GQCF-Net)
-# ---------------------------------------------------------
 models = {
     "SVM (Linear)": SVC(kernel='linear', probability=True, random_state=42),
     "SVM (RBF)": SVC(kernel='rbf', probability=True, random_state=42),
@@ -55,11 +50,9 @@ models = {
 }
 
 # ---------------------------------------------------------
-# ۳. ارزیابی الگوریتم‌ها با Stratified 5-Fold CV
-# ---------------------------------------------------------
 if __name__ == "__main__":
     X, y = load_prostate_data()
-    INPUT_DIM = 256  # دقیقاً ۲۵۶ ویژگی ورودی مدل GQCF-Net
+    INPUT_DIM = 256  
     
     skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
     
@@ -76,24 +69,19 @@ if __name__ == "__main__":
             X_tr, X_te = X[train_idx], X[test_idx]
             y_tr, y_te = y[train_idx], y[test_idx]
             
-            # ۱. استانداردسازی روی داده‌های آموزش
             scaler = StandardScaler()
             X_tr = scaler.fit_transform(X_tr)
             X_te = scaler.transform(X_te)
             
-            # ۲. انتخاب ۲۵۶ ویژگی برتر (دقیقاً مطابقت با Amplitude Encoding در GQCF-Net)
             selector = SelectKBest(score_func=mutual_info_classif, k=INPUT_DIM)
             X_tr = selector.fit_transform(X_tr, y_tr)
             X_te = selector.transform(X_te)
             
-            # ۳. آموزش مدل
             model.fit(X_tr, y_tr)
             
-            # ۴. پیش‌بینی
             preds = model.predict(X_te)
             probs = model.predict_proba(X_te)[:, 1] if hasattr(model, "predict_proba") else preds
             
-            # ۵. محاسبه معیارها
             accs.append(accuracy_score(y_te, preds))
             precs.append(precision_score(y_te, preds, zero_division=0))
             recs.append(recall_score(y_te, preds, zero_division=0))
