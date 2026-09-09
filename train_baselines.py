@@ -19,7 +19,7 @@ from sklearn.neural_network import MLPClassifier
 
 # ---------------------------------------------------------
 def load_prostate_data():
-    print("در حال دریافت دیتاست Prostate...")
+    print("downloading Prostate...")
     dataset = openml.datasets.get_dataset(1101)
     X_df, y_df, _, _ = dataset.get_data(dataset_format="dataframe")
     target_col = dataset.default_target_attribute
